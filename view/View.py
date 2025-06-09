@@ -1,4 +1,4 @@
-import Controller
+from controller import Controller
 import tkinter as tk
 
 class View:
