@@ -1,8 +1,9 @@
-from controller import Controller
+from controller.Controller import Controller
 import tkinter as tk
 
 class View:
     def __init__(self):
+        self.controller = Controller()
         self.root = tk.Tk()
         self.root.title("Gestão de Estoque")
         self.root.geometry("900x600")
@@ -53,38 +54,24 @@ class View:
 
         #Carrega dados
 
-        lista_produtos = [
-            {
-                "id": 1,
-                "nome": "Mouse Gamer",
-                "categoria": "Periféricos",
-                "quantidade": 25
-            },
-            {
-                "id": 2,
-                "nome": "Teclado Mecânico",
-                "categoria": "Periféricos",
-                "quantidade": 15
-            },
-            {
-                "id": 3,
-                "nome": "Monitor 24 Polegadas",
-                "categoria": "Monitores",
-                "quantidade": 8
-            }
-        ]
+        lista_produtos = self.controller.produtos_em_estoque()
         actual_row = 1
         for product in lista_produtos:
-            self.label_product_id = tk.Label(container, text=product.get('id'), bg="#ffffff", borderwidth=1, relief="solid", width=15)
+            produto_id = product[0]
+            nome = product[1]
+            categoria = product[2]
+            quantidade = product[3]
+
+            self.label_product_id = tk.Label(container, text=produto_id, bg="#ffffff", borderwidth=1, relief="solid", width=15)
             self.label_product_id.grid(row=actual_row, column=0, padx=1, pady=1)
 
-            self.label_product_nome = tk.Label(container, text=product.get('nome'), bg="#ffffff", borderwidth=1, relief="solid", width=20)
+            self.label_product_nome = tk.Label(container, text=nome, bg="#ffffff", borderwidth=1, relief="solid", width=20)
             self.label_product_nome.grid(row=actual_row, column=1, padx=1, pady=1)
 
-            self.label_product_categoria = tk.Label(container, text=product.get('categoria'), bg="#ffffff", borderwidth=1, relief="solid", width=20)
+            self.label_product_categoria = tk.Label(container, text=categoria, bg="#ffffff", borderwidth=1, relief="solid", width=20)
             self.label_product_categoria.grid(row=actual_row, column=2, padx=1, pady=1)
 
-            self.label_product_qtd = tk.Label(container, text=product.get('quantidade'), bg="#ffffff", borderwidth=1, relief="solid", width=10)
+            self.label_product_qtd = tk.Label(container, text=quantidade, bg="#ffffff", borderwidth=1, relief="solid", width=10)
             self.label_product_qtd.grid(row=actual_row, column=3, padx=1, pady=1)
 
             self.frame_botoes = tk.Frame(container, bg="#ffffff")
@@ -101,7 +88,7 @@ class View:
         self.limpar_tela(container)
         tk.Label(container, text="Tela Editar Estoque", font=("Arial", 20), bg="#ffffff").pack(pady=20)
 
-    def tela_registrar(self, container):
+    def tela_registrar(self, container, controller):
         self.limpar_tela(container)
         container.rowconfigure(2, weight=0)
         
@@ -110,36 +97,44 @@ class View:
 
         self.nome = tk.Label(container, text="Nome:", bg="#ffffff")
         self.nome.grid(row=1, column=0)
-        
         self.inserir_nome = tk.Entry(container, width=20, validate="key")
         self.inserir_nome.grid(row=1, column=1)
 
         self.categoria = tk.Label(container, text="Categoria:", bg="#ffffff")
         self.categoria.grid(row=2, column=0)
-
         self.inserir_categoria = tk.Entry(container, width=20, validate="key")
         self.inserir_categoria.grid(row=2, column=1)
 
         self.quantidade = tk.Label(container, text="Quantidade:", bg="#ffffff")
         self.quantidade.grid(row=3, column=0)
-
         self.inserir_quantidade = tk.Entry(container, width=20, validate="key")
         self.inserir_quantidade.grid(row=3, column=1)
 
         self.preco = tk.Label(container, text="Preco:", bg="#ffffff")
         self.preco.grid(row=4, column=0)
-
         self.inserir_preco = tk.Entry(container, width=20, validate="key")
         self.inserir_preco.grid(row=4, column=1)
-        
+
         self.frame_botoes = tk.Frame(container, bg="#ffffff")
         self.frame_botoes.grid(row=5, column=1, columnspan=2)
-
-        self.botao_limpar = tk.Button(self.frame_botoes, text='Limpar')
+        
+        self.botao_limpar = tk.Button(self.frame_botoes, text='Limpar', command= self.limpar_textos)
         self.botao_limpar.grid(row=0, column=0)
 
-        self.botao_salvar = tk.Button(self.frame_botoes, text='Salvar')
+        self.botao_salvar = tk.Button(self.frame_botoes, text='Salvar', command= lambda: controller.registrar_produto(self.pegar_dados()))
         self.botao_salvar.grid(row=0, column=1)
+
+    def limpar_textos(self):
+        pass
+
+    def pegar_dados(self):
+        return {
+        "nome" : self.inserir_nome.get(),
+        "categoria" : self.inserir_categoria.get(),
+        "quantidade" : self.inserir_quantidade.get(),
+        "preco" : self.inserir_preco.get()
+        }
+
 
     def limpar_tela(self, container):
         for widget in container.winfo_children():
@@ -152,7 +147,7 @@ class View:
         self.tela_editar(self.mainContainer)
 
     def chamar_tela_registro(self):
-        self.tela_registrar(self.mainContainer)
+        self.tela_registrar(self.mainContainer, self.controller)
 
     def sidebar(self, container):
         container.rowconfigure(3, weight=1)
@@ -172,6 +167,3 @@ class View:
         self.botao_sair = tk.Button(container, text="Sair", bg="#e74c3c", fg="white",
                   command=self.root.quit)
         self.botao_sair.grid(row=4, column=0, sticky="ew")
-
-if __name__ == "__main__":
-    View()

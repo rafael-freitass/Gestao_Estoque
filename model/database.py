@@ -1,8 +1,8 @@
 import sqlite3
 
 def criar_conexao():
-    conectar = sqlite3.connect("banco_estoque.db")  # cria o arquivo meubanco.db automaticamente
-    return conectar
+    return sqlite3.connect("banco_estoque.db")
+     
 
 def criar_tabela():
     conectar = criar_conexao()
@@ -19,17 +19,61 @@ def criar_tabela():
     conectar.commit()
     conectar.close()
 
-def inserir_dados():
-    conectar = criar_conexao()
-    cursor = conectar.cursor()
+def registrar_produto(valores):
+    conn = criar_conexao()
+    cursor = conn.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Produto (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome VARCHAR(255) NOT NULL,
-            categoria VARCHAR(255) NOT NULL,
-            quantidade INTEGER NOT NULL,
-            preco DOUBLE NOT NULL   
-        )
+        INSERT INTO Produto (nome, categoria, quantidade, preco)
+        VALUES (?, ?, ?, ?)
+    """, (
+        valores['nome'],
+        valores['categoria'],
+        int(valores['quantidade']),
+        float(valores['preco'])
+    ))
+    conn.commit()
+    print("Produto Salvo no banco com sucesso!")
+    conn.close()
+
+def listar_produtos_estoque():
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * from Produto
+        WHERE Produto.quantidade > 0
     """)
-    conectar.commit()
-    conectar.close()
+    produtos = cursor.fetchall()
+    conn.close()
+    return produtos
+
+def registrar_entrada(id):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE Produto
+        SET quantidade = quantidade + 1
+        WHERE id = ?
+    """, (id))
+    conn.commit()
+    conn.close()
+
+def registrar_saida(id):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT quantidade FROM Produto WHERE id = ?", (id))
+    resultado = cursor.fetchone()
+
+    if resultado and resultado[0] > 0:
+        cursor.execute("""
+            UPDATE Produto
+            SET quantidade = quantidade - 1
+            WHERE id = ?
+        """, (id,))
+        conn.commit()
+        sucesso = True
+    else:
+        sucesso = False
+
+    conn.close()
+    return sucesso
