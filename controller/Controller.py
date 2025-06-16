@@ -8,11 +8,20 @@ class Controller:
     def produtos_em_estoque(self):
         return self.model.produtos_em_estoque()
 
+    def buscar_produto(self, id):
+        return self.model.buscar_produto(id)
+
     def registrar_produto(self, valores:Dict):
         self.model.registrar_produto(valores)
     
-    def registrar_entrada(self):
-        self.model.registro_entrada(self)
+    def registrar_entrada(self, id):
+        self.model.registro_entrada(id)
 
-    def registrar_saida(self):
-        self.model.registro_saida(self)
+    def registrar_saida(self, id):
+        self.model.registro_saida(id)
+
+    def atualizar_produto(self, id, dados: dict):
+        self.model.atualizar_produto(id, dados)
+
+    def excluir_produto(self, id):
+        self.model.excluir_produto(id)

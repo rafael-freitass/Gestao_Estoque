@@ -2,19 +2,28 @@ import model.database as database
 
 class Model:
     def __init__(self):
-        pass
+        self.database = database
     
     def registrar_produto(self, valores):
-        database.registrar_produto(valores)
+        self.database.registrar_produto(valores)
 
     def registro_entrada(self, id):
-        database.registrar_entrada(id)
+        self.database.registrar_entrada(id)
 
     def registro_saida(self, id):
-        database.registrar_saida(id)
+        self.database.registrar_saida(id)
+
+    def buscar_produto(self, id):
+        return database.buscar_produto(id)
 
     def produtos_em_estoque(self):
-        return database.listar_produtos_estoque()
+        return self.database.listar_produtos_estoque()
 
     def vendas_dia(self):
         pass
+
+    def atualizar_produto(self, id, dados):
+        self.database.atualizar_produto(id, dados)
+
+    def excluir_produto(self, id):
+        self.database.excluir_produto(id)

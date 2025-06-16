@@ -1,8 +1,7 @@
 import sqlite3
 
 def criar_conexao():
-    return sqlite3.connect("banco_estoque.db")
-     
+    return sqlite3.connect("banco_estoque.db")    
 
 def criar_tabela():
     conectar = criar_conexao()
@@ -53,7 +52,7 @@ def registrar_entrada(id):
         UPDATE Produto
         SET quantidade = quantidade + 1
         WHERE id = ?
-    """, (id))
+    """, (id,))
     conn.commit()
     conn.close()
 
@@ -61,7 +60,7 @@ def registrar_saida(id):
     conn = criar_conexao()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT quantidade FROM Produto WHERE id = ?", (id))
+    cursor.execute("SELECT quantidade FROM Produto WHERE id = ?", (id,))
     resultado = cursor.fetchone()
 
     if resultado and resultado[0] > 0:
@@ -77,3 +76,38 @@ def registrar_saida(id):
 
     conn.close()
     return sucesso
+
+def buscar_produto(id):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * from Produto
+        WHERE id = ?
+    """, (id,))
+    produto = cursor.fetchone()
+    conn.close()
+    return produto
+
+def atualizar_produto(id, dados):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE Produto
+        SET nome = ?, categoria = ?, quantidade = ?, preco = ?
+        WHERE id = ?
+    """, (
+        dados['nome'],
+        dados['categoria'],
+        int(dados['quantidade']),
+        float(dados['preco']),
+        id
+    ))
+    conn.commit()
+    conn.close()
+
+def excluir_produto(id):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM Produto WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
