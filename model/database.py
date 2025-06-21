@@ -54,6 +54,7 @@ def registrar_entrada(id):
         WHERE id = ?
     """, (id,))
     conn.commit()
+    print("Entrada Registrada no banco com sucesso!")
     conn.close()
 
 def registrar_saida(id):
@@ -73,7 +74,7 @@ def registrar_saida(id):
         sucesso = True
     else:
         sucesso = False
-
+    print("Saida Registrada no banco com sucesso!")
     conn.close()
     return sucesso
 
@@ -103,6 +104,7 @@ def atualizar_produto(id, dados):
         id
     ))
     conn.commit()
+    print("Produto Atualizado no banco com sucesso!")
     conn.close()
 
 def excluir_produto(id):
@@ -110,4 +112,5 @@ def excluir_produto(id):
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Produto WHERE id = ?", (id,))
     conn.commit()
+    print("Produto Excluido no banco com sucesso!")
     conn.close()

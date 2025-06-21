@@ -19,4 +19,9 @@ class Sidebar(tk.Frame):
         self.botao_registrar = tk.Button(self, text="Registrar Produto", bg="#34495e", fg="white",
                   command=lambda: self.controller_view.show_frame("Tela_registrar")).pack(fill="x")
 
-        self.botao_sair = tk.Button(self, text="Sair", bg="#e74c3c", fg="white")
+        self.botao_sair = tk.Button(self, text="Sair", bg="#e74c3c", fg="white", command=self.exit).pack(fill="x")
+
+    def exit(self):
+        self.controller_view.root.destroy()
+        return
+        
