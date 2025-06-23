@@ -4,8 +4,8 @@ def criar_conexao():
     return sqlite3.connect("banco_estoque.db")    
 
 def criar_tabela():
-    conectar = criar_conexao()
-    cursor = conectar.cursor()
+    conn = criar_conexao()
+    cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Produto (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,8 +15,8 @@ def criar_tabela():
             preco DOUBLE NOT NULL   
         )
     """)
-    conectar.commit()
-    conectar.close()
+    conn.commit()
+    conn.close()
 
 def registrar_produto(valores):
     conn = criar_conexao()
@@ -110,7 +110,23 @@ def atualizar_produto(id, dados):
 def excluir_produto(id):
     conn = criar_conexao()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM Produto WHERE id = ?", (id,))
+    cursor.execute("""
+                DELETE * 
+                FROM Produto 
+                WHERE id = ?
+            """, (id,))
     conn.commit()
     print("Produto Excluido no banco com sucesso!")
     conn.close()
+
+def buscar_quantidade_produto(produto_id):
+    conn = criar_conexao()
+    cursor = conn.cursor()
+    cursor.execute("""
+                SELECT quantidade 
+                FROM Produto
+                WHERE id = ?
+            """,(produto_id,))
+    qtd_produto = cursor.fetchone()
+    conn.close()
+    return qtd_produto[0]

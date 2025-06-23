@@ -1,6 +1,5 @@
 from controller.Controller import Controller
 import tkinter as tk
-import tkinter.messagebox as messagebox
 
 from view.estoque.Tela_estoque import Tela_estoque
 from view.edicao.Tela_editar import Tela_editar

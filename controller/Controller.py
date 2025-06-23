@@ -25,3 +25,6 @@ class Controller:
 
     def excluir_produto(self, id):
         self.model.excluir_produto(id)
+
+    def buscar_quantidade(self, produto_id):
+        return self.model.buscar_quantidade_produto(produto_id)

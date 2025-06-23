@@ -27,3 +27,6 @@ class Model:
 
     def excluir_produto(self, id):
         self.database.excluir_produto(id)
+
+    def buscar_quantidade_produto(self, produto_id):
+        return self.database.buscar_quantidade_produto(produto_id)
