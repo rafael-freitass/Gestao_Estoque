@@ -2,9 +2,23 @@ from typing import Dict
 from model.Model import Model
 
 class Controller:
-    def __init__(self):
+    def __init__(self, view):
+        self.view = view
         self.model = Model()
     
+    def handle_exit(self):
+        self.view.root.destroy()
+        return
+
+    def abrir_tela_estoque(self):
+        self.view.show_frame("Tela_estoque")
+
+    def abrir_tela_editar(self):
+        self.view.show_frame("Tela_editar")
+    
+    def abrir_tela_registrar(self):
+        self.view.show_frame("Tela_registrar")
+
     def produtos_em_estoque(self):
         return self.model.produtos_em_estoque()
 

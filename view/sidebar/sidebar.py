@@ -1,27 +1,32 @@
-from controller.Controller import Controller
 import tkinter as tk
-import tkinter.messagebox as messagebox
 
 class Sidebar(tk.Frame):
-    def __init__(self, parent, controller_view):
-        super().__init__(parent)
-        self.controller_view = controller_view
-        self.controller = controller_view.controller
+    def __init__(self, frame_pai, instancia_view):
+        super().__init__(frame_pai, bg="#ffffff")
+        
+        self.controller = instancia_view.controller
+        
+        self.montar_sidebar()
 
-        self.pack(fill="y")
+    def montar_sidebar(self):
+        container = self
 
-        self.botao_estoque = tk.Button(self, text="Estoque", bg="#34495e", fg="white",
-                  command=lambda: self.controller_view.show_frame("Tela_estoque")).pack(fill="x")
+        self.botao_estoque = tk.Button(container, text="Estoque", bg="#34495e", fg="white",
+                  command=lambda: self.controller.abrir_tela_estoque())
+        self.botao_estoque.grid(row=0, column=0, sticky="nsew", pady=5, padx=5)
 
-        self.botao_editar = tk.Button(self, text="Editar Produto", bg="#34495e", fg="white",
-                  command=lambda: self.controller_view.show_frame("Tela_editar")).pack(fill="x")
+        self.botao_editar = tk.Button(container, text="Editar Produto", bg="#34495e", fg="white",
+                  command=lambda: self.controller.abrir_tela_editar())
+        self.botao_editar.grid(row=1, column=0, sticky="nsew", pady=5, padx=5)
 
-        self.botao_registrar = tk.Button(self, text="Registrar Produto", bg="#34495e", fg="white",
-                  command=lambda: self.controller_view.show_frame("Tela_registrar")).pack(fill="x")
+        self.botao_registrar = tk.Button(container, text="Registrar Produto", bg="#34495e", fg="white",
+                  command=lambda: self.controller.abrir_tela_registrar())
+        self.botao_registrar.grid(row=2, column=0, sticky="nsew", pady=5, padx=5)
 
-        self.botao_sair = tk.Button(self, text="Sair", bg="#e74c3c", fg="white", command=self.exit).pack(fill="x")
+        self.botao_sair = tk.Button(container, text="Sair", bg="#e74c3c", fg="white", command=self.exit)
+        self.botao_sair.grid(row=3, column=0, sticky="nsew", pady=5, padx=5)
+
 
     def exit(self):
-        self.controller_view.root.destroy()
-        return
+        self.controller.handle_exit()
         

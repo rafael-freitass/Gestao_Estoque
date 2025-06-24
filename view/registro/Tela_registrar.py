@@ -1,12 +1,10 @@
-from controller.Controller import Controller
 import tkinter as tk
-import tkinter.messagebox as messagebox
 
 class Tela_registrar(tk.Frame):
-    def __init__(self, parent, controller_view):
-        super().__init__(parent, bg="#ffffff")
-        self.controller_view = controller_view
-        self.controller = controller_view.controller
+    def __init__(self, frame_pai, instancia_view):
+        super().__init__(frame_pai, bg="#ffffff")
+
+        self.controller = instancia_view.controller
         
         self.rowconfigure(2, weight=0)
 
@@ -36,12 +34,21 @@ class Tela_registrar(tk.Frame):
         self.frame_botoes = tk.Frame(self, bg="#ffffff")
         self.frame_botoes.grid(row=5, column=1, columnspan=2)
         
-        self.botao_limpar = tk.Button(self.frame_botoes, text='Limpar')
-        self.botao_limpar.grid(row=0, column=0)
+        self.botao_limpar = tk.Button(self.frame_botoes, text='Limpar', command= lambda: self.limpar_entry())
+        self.botao_limpar.grid(row=0, column=0, padx= 5)
 
-        self.botao_salvar = tk.Button(self.frame_botoes, text='Salvar', command= lambda: self.controller.registrar_produto(self.pegar_dados()))
-        self.botao_salvar.grid(row=0, column=1)
+        self.botao_salvar = tk.Button(self.frame_botoes, text='Salvar', command= lambda: self.salvar_e_voltar())
+        self.botao_salvar.grid(row=0, column=1, padx= 5)
 
+    def salvar_e_voltar(self):
+        self.controller.registrar_produto(self.pegar_dados())
+        self.controller.abrir_tela_estoque()
+
+    def limpar_entry(self):
+        self.inserir_nome.delete(0, tk.END)
+        self.inserir_categoria.delete(0, tk.END),
+        self.inserir_quantidade.delete(0, tk.END),
+        self.inserir_preco.delete(0, tk.END)
 
     def pegar_dados(self):
         return {

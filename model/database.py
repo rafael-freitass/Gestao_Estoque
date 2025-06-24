@@ -111,7 +111,7 @@ def excluir_produto(id):
     conn = criar_conexao()
     cursor = conn.cursor()
     cursor.execute("""
-                DELETE * 
+                DELETE 
                 FROM Produto 
                 WHERE id = ?
             """, (id,))
