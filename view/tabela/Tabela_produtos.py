@@ -1,12 +1,13 @@
 import tkinter as tk
 
 class Tabela_produtos(tk.Frame):
-    def __init__(self, parent, controller, tipo_tabela, callback_botao_editar=None):
+    def __init__(self, parent, controller, tipo_tabela, callback_botao_editar=None, callback_atualizar_vendas=None):
         super().__init__(parent, bg="#ffffff")
         
         self.controller = controller
         self.tipo_tabela = tipo_tabela 
         self.callback_botao_editar = callback_botao_editar
+        self.callback_atualizar_vendas = callback_atualizar_vendas
 
         self.label_quantidade = {}
 
@@ -101,10 +102,12 @@ class Tabela_produtos(tk.Frame):
 
     def adicionar_e_atualizar(self, produto_id):
         self.controller.registrar_entrada(produto_id)
+        self.callback_atualizar_vendas()
         self.atualizar_quantidade(produto_id)
 
     def diminuir_e_atualizar(self, produto_id):
         self.controller.registrar_saida(produto_id)
+        self.callback_atualizar_vendas()
         self.atualizar_quantidade(produto_id)
 
     def excluir_e_atualizar(self, produto_id):

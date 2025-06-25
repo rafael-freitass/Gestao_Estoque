@@ -42,3 +42,9 @@ class Controller:
 
     def buscar_quantidade(self, produto_id):
         return self.model.buscar_quantidade_produto(produto_id)
+    
+    def data_hoje(self):
+        return self.model.data_hoje()
+    
+    def calcular_total_saidas(self):
+        return self.model.calcular_total_saidas()
