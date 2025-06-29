@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 class Tabela_produtos(tk.Frame):
     def __init__(self, parent, controller, tipo_tabela, callback_botao_editar=None, callback_atualizar_vendas=None):
@@ -101,16 +102,31 @@ class Tabela_produtos(tk.Frame):
         label.config(text=str(nova_quantidade))
 
     def adicionar_e_atualizar(self, produto_id):
-        self.controller.registrar_entrada(produto_id)
+        registro_entrada_banco = self.controller.registrar_entrada(produto_id)
+        if registro_entrada_banco:
+            messagebox.showinfo("Sucesso", "Entrada de produto registrada com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Erro ao registrar entrada de produto.")
+
         self.callback_atualizar_vendas()
         self.atualizar_quantidade(produto_id)
 
     def diminuir_e_atualizar(self, produto_id):
-        self.controller.registrar_saida(produto_id)
+        registro_saida_banco = self.controller.registrar_saida(produto_id)
+
+        if registro_saida_banco:
+            messagebox.showinfo("Sucesso", "Saída de produto registrada com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Erro ao registrar saída de produto (Sem Estoque!).")
+
         self.callback_atualizar_vendas()
         self.atualizar_quantidade(produto_id)
 
     def excluir_e_atualizar(self, produto_id):
-        self.controller.excluir_produto(produto_id)
-        self.atualizar_tabela()
+        confirmacao = messagebox.askyesno("Tem certeza?", "Essa ação irá excluir o produto!")
+        if confirmacao:
+            self.controller.excluir_produto(produto_id)
+            self.atualizar_tabela()
+        else:
+            pass
         

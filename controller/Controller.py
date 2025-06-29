@@ -26,16 +26,16 @@ class Controller:
         return self.model.buscar_produto(id)
 
     def registrar_produto(self, valores:Dict):
-        self.model.registrar_produto(valores)
+        return self.model.registrar_produto(valores)
     
     def registrar_entrada(self, id):
-        self.model.registro_entrada(id)
+        return self.model.registro_entrada(id)
 
     def registrar_saida(self, id):
-        self.model.registro_saida(id)
+        return self.model.registro_saida(id)
 
     def atualizar_produto(self, id, dados: dict):
-        self.model.atualizar_produto(id, dados)
+        return self.model.atualizar_produto(id, dados)
 
     def excluir_produto(self, id):
         self.model.excluir_produto(id)

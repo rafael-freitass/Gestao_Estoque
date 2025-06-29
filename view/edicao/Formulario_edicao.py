@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 class Formulario_edicao(tk.Frame):
     def __init__(self, parent, controller, produto_id, callback_botao_voltar):
@@ -48,5 +49,9 @@ class Formulario_edicao(tk.Frame):
 
     def salvar(self):
         dados = self.pegar_dados()
-        self.controller.atualizar_produto(self.produto_id, dados)
+        atualizar_produto = self.controller.atualizar_produto(self.produto_id, dados)
+        if atualizar_produto:
+            messagebox.showinfo("Sucesso", "Produto atualizado com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Erro ao atualizar o produto")
         self.callback_botao_voltar()

@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from view.tabela.Tabela_produtos import Tabela_produtos
 
 class Tela_estoque(tk.Frame):
@@ -8,7 +9,6 @@ class Tela_estoque(tk.Frame):
         self.controller = instancia_view.controller
         self.data = self.controller.data_hoje()
         self.vendas_dia = self.controller.calcular_total_saidas()
-        
 
         # título da tela
         self.titulo = tk.Label(self, text="ESTOQUE", font=("Arial", 20), bg="#ffffff")
@@ -18,7 +18,7 @@ class Tela_estoque(tk.Frame):
         self.frame_tabela = tk.Frame(self, bg="#ffffff")
         self.frame_tabela.grid(row=1, column=0)
 
-        # chama a tabela de estoque
+        # chama a tabela de produtos
         self.tabela = Tabela_produtos(self.frame_tabela, self.controller, tipo_tabela="estoque", callback_atualizar_vendas=self.atualizar_vendas)
         self.tabela.grid(row=2, column=0)
 

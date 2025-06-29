@@ -26,24 +26,28 @@ class Database_SQLite:
     def registrar_produto(self, valores):
         self.conn = self.criar_conexao()
         cursor = self.conn.cursor()
-        cursor.execute("""
-            INSERT INTO Produto (nome, categoria, quantidade, preco)
-            VALUES (?, ?, ?, ?)
-        """, (
-            valores['nome'],
-            valores['categoria'],
-            int(valores['quantidade']),
-            float(valores['preco'])
-        ))
-        self.conn.commit()
-        self.conn.close()
+        try:
+            cursor.execute("""
+                INSERT INTO Produto (nome, categoria, quantidade, preco)
+                VALUES (?, ?, ?, ?)
+            """, (
+                valores['nome'],
+                valores['categoria'],
+                int(valores['quantidade']),
+                float(valores['preco'])
+            ))
+            self.conn.commit()
+            self.conn.close()
+            return True
+        except:
+            return False
 
     def listar_produtos_estoque(self):
         self.conn = self.criar_conexao()
         cursor = self.conn.cursor()
         cursor.execute("""
             SELECT * from Produto
-            WHERE Produto.quantidade > 0
+            WHERE Produto.quantidade > -1
         """)
         produtos = cursor.fetchall()
         self.conn.close()
@@ -52,33 +56,35 @@ class Database_SQLite:
     def registrar_entrada(self, id):
         self.conn = self.criar_conexao()
         cursor = self.conn.cursor()
-        cursor.execute("""
-            UPDATE Produto
-            SET quantidade = quantidade + 1
-            WHERE id = ?
-        """, (id,))
-        self.conn.commit()
-        self.conn.close()
+        try:
+            cursor.execute("""
+                UPDATE Produto
+                SET quantidade = quantidade + 1
+                WHERE id = ?
+            """, (id,))
+            self.conn.commit()
+            self.conn.close()
+            return True
+        except:
+            return False
 
     def registrar_saida(self, id):
         self.conn = self.criar_conexao()
         cursor = self.conn.cursor()
-
-        cursor.execute("SELECT quantidade FROM Produto WHERE id = ?", (id,))
-        resultado = cursor.fetchone()
-
-        if resultado and resultado[0] > 0:
-            cursor.execute("""
-                UPDATE Produto
-                SET quantidade = quantidade - 1
-                WHERE id = ?
-            """, (id,))
-            self.conn.commit()
-            sucesso = True
-        else:
-            sucesso = False
-        self.conn.close()
-        return sucesso
+        try:
+            cursor.execute("SELECT quantidade FROM Produto WHERE id = ?", (id,))
+            resultado = cursor.fetchone()
+            if resultado and resultado[0] > 0:
+                cursor.execute("""
+                    UPDATE Produto
+                    SET quantidade = quantidade - 1
+                    WHERE id = ?
+                """, (id,))
+                self.conn.commit()
+            self.conn.close()
+            return True
+        except:
+            return False
 
     def buscar_produto(self, id):
         self.conn = self.criar_conexao()
@@ -94,19 +100,23 @@ class Database_SQLite:
     def atualizar_produto(self, id, dados):
         self.conn = self.criar_conexao()
         cursor = self.conn.cursor()
-        cursor.execute("""
-            UPDATE Produto
-            SET nome = ?, categoria = ?, quantidade = ?, preco = ?
-            WHERE id = ?
-        """, (
-            dados['nome'],
-            dados['categoria'],
-            int(dados['quantidade']),
-            float(dados['preco']),
-            id
-        ))
-        self.conn.commit()
-        self.conn.close()
+        try:
+            cursor.execute("""
+                UPDATE Produto
+                SET nome = ?, categoria = ?, quantidade = ?, preco = ?
+                WHERE id = ?
+            """, (
+                dados['nome'],
+                dados['categoria'],
+                int(dados['quantidade']),
+                float(dados['preco']),
+                id
+            ))
+            self.conn.commit()
+            self.conn.close()
+            return True
+        except:
+            return False
 
     def excluir_produto(self, id):
         self.conn = self.criar_conexao()

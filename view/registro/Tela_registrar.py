@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 class Tela_registrar(tk.Frame):
     def __init__(self, frame_pai, instancia_view):
@@ -9,7 +10,7 @@ class Tela_registrar(tk.Frame):
         self.rowconfigure(2, weight=0)
 
         self.titulo = tk.Label(self, text="Registar Produto", font=("Arial", 20), bg="#ffffff")
-        self.titulo.grid(row=0, column=0)
+        self.titulo.grid(row=0, column=0, columnspan=2, pady=(10, 20), sticky="n")
 
         self.nome = tk.Label(self, text="Nome:", bg="#ffffff")
         self.nome.grid(row=1, column=0)
@@ -41,7 +42,12 @@ class Tela_registrar(tk.Frame):
         self.botao_salvar.grid(row=0, column=1, padx= 5)
 
     def salvar_e_voltar(self):
-        self.controller.registrar_produto(self.pegar_dados())
+        registro_banco = self.controller.registrar_produto(self.pegar_dados())
+        if registro_banco:
+            messagebox.showinfo("Sucesso", "Produto registrado com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Erro ao registrar produto")
+
         self.controller.abrir_tela_estoque()
 
     def limpar_entry(self):

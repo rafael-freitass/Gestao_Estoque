@@ -9,22 +9,23 @@ class Model:
         self.db_csv = Database_CSV()
     
     def registrar_produto(self, valores):
-        self.db_sqlite.registrar_produto(valores)
+        return self.db_sqlite.registrar_produto(valores)
 
     def registro_entrada(self, id):
         produto = self.db_sqlite.buscar_produto(id)
-        self.db_sqlite.registrar_entrada(id)
-        self.db_csv.registrar_entrada(produto[1], 1, produto[4])
+        registro_entrada_banco = self.db_sqlite.registrar_entrada(id)
+        if registro_entrada_banco:
+            self.db_csv.registrar_entrada(produto[1], 1, produto[4])
+        return registro_entrada_banco
 
     def registro_saida(self, id):
         produto = self.db_sqlite.buscar_produto(id)
         if produto and produto[3] > 0:
-            self.db_sqlite.registrar_saida(id)
-            self.db_csv.registrar_saida(produto[1], 1, produto[4])
-            return True
-        else:
-            return False
-
+            registro_saida_banco = self.db_sqlite.registrar_saida(id)
+            if registro_saida_banco:
+                self.db_csv.registrar_saida(produto[1], 1, produto[4])
+            return registro_saida_banco
+        
     def buscar_produto(self, id):
         return self.db_sqlite.buscar_produto(id)
 
@@ -35,7 +36,7 @@ class Model:
         pass
 
     def atualizar_produto(self, id, dados):
-        self.db_sqlite.atualizar_produto(id, dados)
+        return self.db_sqlite.atualizar_produto(id, dados)
 
     def excluir_produto(self, id):
         self.db_sqlite.excluir_produto(id)
