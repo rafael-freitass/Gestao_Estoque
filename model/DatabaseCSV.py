@@ -3,12 +3,9 @@ from datetime import datetime
 
 class Database_CSV:
     def __init__(self):
-        self.atualizar_path()
-        self.criar_planilha()
-
-    def atualizar_path(self):
         data_atual = datetime.now().strftime("%d-%m-%Y")
         self.path = f"controle_caixa_{data_atual}.csv"
+        self.criar_planilha()
 
     def criar_planilha(self):
         try:

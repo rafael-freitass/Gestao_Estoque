@@ -17,7 +17,6 @@ class Tabela_produtos(tk.Frame):
     def montar_tabela(self):
         container = self
 
-        # headers da tabela
         self.label_id = tk.Label(container, text="ID", bg="#ffffff", borderwidth=1, relief="solid", width=15)
         self.label_id.grid(row=0, column=0, padx=1, pady=1)
 
@@ -41,7 +40,6 @@ class Tabela_produtos(tk.Frame):
             self.label_entrada_saida = tk.Label(container, text="OPÇÕES", bg="#ffffff", borderwidth=1, relief="solid", width=15)
             self.label_entrada_saida.grid(row=0, column=5, padx=1, pady=1)
         
-        # carrega lista de produtos
         lista_produtos = self.controller.produtos_em_estoque()
 
         self.label_quantidade = {}
@@ -54,7 +52,6 @@ class Tabela_produtos(tk.Frame):
             quantidade = product[3]
             preco = product[4]
 
-            # monta tabela com lista de produtos
             self.label_product_id = tk.Label(container, text=produto_id, bg="#ffffff", borderwidth=1, relief="solid", width=15)
             self.label_product_id.grid(row=actual_row, column=0, padx=1, pady=1)
 
@@ -87,9 +84,9 @@ class Tabela_produtos(tk.Frame):
 
                 self.botao_excluir = tk.Button(self.frame_botoes, text="Excluir", command= lambda pid=produto_id: self.excluir_e_atualizar(pid), width=6, bg="#ffffff", borderwidth=1, relief="solid")
                 self.botao_excluir.grid(row=actual_row, column=6, padx=1, pady=1)
-            
+
             actual_row += 1
-    
+
     def atualizar_tabela(self):
         for widget in self.winfo_children():
             widget.destroy()
@@ -129,4 +126,3 @@ class Tabela_produtos(tk.Frame):
             self.atualizar_tabela()
         else:
             pass
-        
