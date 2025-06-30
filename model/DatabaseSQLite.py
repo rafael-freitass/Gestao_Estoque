@@ -48,6 +48,7 @@ class Database_SQLite:
         cursor.execute("""
             SELECT * from Produto
             WHERE Produto.quantidade > -1
+            LIMIT 10
         """)
         produtos = cursor.fetchall()
         self.conn.close()
